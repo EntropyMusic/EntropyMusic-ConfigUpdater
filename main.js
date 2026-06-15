@@ -8,11 +8,13 @@
 //  2. Permission handlers that grant `midi` + `midiSysex`. In a browser the user
 //     gets a prompt; in Electron the request is denied by default unless handled.
 
-const { app, BrowserWindow, Menu, session, protocol, net, shell } = require("electron");
+const { app, BrowserWindow, Menu, ipcMain, session, protocol, net, shell } = require("electron");
+const { autoUpdater } = require("electron-updater");
 const path = require("node:path");
 const { pathToFileURL } = require("node:url");
 
 const RENDERER_DIR = path.join(__dirname, "renderer");
+const PRELOAD = path.join(__dirname, "preload.js");
 const SCHEME = "app";
 
 // Must run before app `ready`.
@@ -141,6 +143,53 @@ function buildAppMenu() {
   Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 }
 
+// Auto-update via electron-updater. The feed (latest.yml) is served from our own
+// domain (see `build.publish` in package.json); the installers it points to live
+// on GitHub Releases. We drive our own UI instead of checkForUpdatesAndNotify so
+// the launcher home page can show progress; status is relayed to the renderer
+// over IPC (see preload.js -> window.updater).
+function setupAutoUpdates() {
+  // In dev there is no packaged app / signed feed, so updates can't apply and
+  // the updater would only emit noise. Skip entirely unless packaged.
+  if (!app.isPackaged) return;
+
+  autoUpdater.autoDownload = true;
+  autoUpdater.autoInstallOnAppQuit = true;
+
+  const broadcast = (state, extra = {}) => {
+    for (const win of BrowserWindow.getAllWindows()) {
+      win.webContents.send("update-status", { state, ...extra });
+    }
+  };
+
+  autoUpdater.on("checking-for-update", () => broadcast("checking"));
+  autoUpdater.on("update-available", (info) =>
+    broadcast("available", { version: info?.version })
+  );
+  autoUpdater.on("update-not-available", () => broadcast("up-to-date"));
+  autoUpdater.on("download-progress", (p) =>
+    broadcast("downloading", { percent: Math.round(p?.percent || 0) })
+  );
+  autoUpdater.on("update-downloaded", (info) =>
+    broadcast("downloaded", { version: info?.version })
+  );
+  autoUpdater.on("error", (err) =>
+    broadcast("error", { message: String(err?.message || err) })
+  );
+
+  // Renderer-driven actions.
+  ipcMain.on("update-check", () => {
+    autoUpdater.checkForUpdates().catch(() => {});
+  });
+  ipcMain.on("update-install", () => {
+    // setImmediate so the IPC round-trips before the app tears down.
+    setImmediate(() => autoUpdater.quitAndInstall());
+  });
+
+  // Kick off an initial check shortly after launch.
+  autoUpdater.checkForUpdates().catch(() => {});
+}
+
 function createWindow() {
   const win = new BrowserWindow({
     width: 1280,
@@ -153,6 +202,7 @@ function createWindow() {
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: true,
+      preload: PRELOAD,
     },
   });
 
@@ -189,6 +239,7 @@ app.whenReady().then(() => {
   ses.setPermissionCheckHandler((_wc, permission) => grantMidi(permission));
 
   createWindow();
+  setupAutoUpdates();
 
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
