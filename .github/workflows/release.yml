@@ -1,0 +1,103 @@
+name: Release
+
+# Builds the firmware app for macOS, Windows and Linux and publishes a release
+# when you push a version tag, e.g.:
+#
+#     npm version patch        # bumps package.json + creates the git tag
+#     git push --follow-tags   # triggers this workflow
+#
+# What it does:
+#   1. build job (matrix)  – builds installers on each OS, uploads them + the
+#                            per-OS latest*.yml as workflow artifacts.
+#   2. publish job         – attaches all installers AND the rewritten feeds
+#                            (latest*.yml, url/path -> absolute GitHub URLs) to the
+#                            GitHub Release in THIS repo.
+#
+# The website does NOT need a per-release commit: entropymusic.cc/updates/*.yml
+# is a Cloudflare redirect to this repo's `releases/latest/download/*.yml`, so the
+# newest release's feeds are served automatically. No tokens, no website deploy.
+#
+# Required setup:
+#   • Run this from the SAME repo that hosts the releases (the binaries' URLs use
+#     ${{ github.repository }}). Code, tags and releases all live together here.
+#   • macOS builds are UNSIGNED here (CSC_IDENTITY_AUTO_DISCOVERY=false). They
+#     install fine but can't silently auto-update until you add signing certs +
+#     notarization secrets. Windows/Linux auto-update unsigned.
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive # web/ submodule is needed by npm run sync
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      # `--publish never`: we upload via gh in the publish job, not via
+      # electron-builder (the generic provider can't upload anyway).
+      - run: npm run dist -- --publish never
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: false # don't attempt code signing in CI
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist-${{ matrix.os }}
+          if-no-files-found: ignore
+          path: |
+            dist/*.exe
+            dist/*.dmg
+            dist/*.zip
+            dist/*.AppImage
+            dist/*.deb
+            dist/*.blockmap
+            dist/latest*.yml
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4 # this repo, for scripts/rewrite-feed.mjs
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true # flatten all dist-<os>/ into artifacts/
+
+      - name: Rewrite feeds to absolute GitHub URLs
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          BASE="https://github.com/${GITHUB_REPOSITORY}/releases/download/${GITHUB_REF_NAME}"
+          for y in artifacts/latest*.yml; do
+            node scripts/rewrite-feed.mjs "$y" "$BASE"
+          done
+
+      - name: Attach installers + feeds to the GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          TAG="${GITHUB_REF_NAME}"
+          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 \
+            || gh release create "$TAG" --repo "$GITHUB_REPOSITORY" \
+                 --title "$TAG" --notes "Entropy Music Firmware ${TAG#v}"
+          # Installers + blockmaps + the rewritten per-OS feeds (served via the
+          # entropymusic.cc/updates/ redirect to releases/latest/download/).
+          files=(artifacts/*.exe artifacts/*.dmg artifacts/*.zip artifacts/*.AppImage artifacts/*.deb artifacts/*.blockmap artifacts/latest*.yml)
+          gh release upload "$TAG" "${files[@]}" --repo "$GITHUB_REPOSITORY" --clobber

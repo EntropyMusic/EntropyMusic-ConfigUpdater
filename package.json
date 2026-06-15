@@ -21,6 +21,13 @@
     "appId": "cc.entropymusic.firmware",
     "productName": "Entropy Music Firmware",
     "artifactName": "EntropyMusicFirmware-${version}-${arch}.${ext}",
+    "electronLanguages": [
+      "en",
+      "en_GB",
+      "zh_CN",
+      "zh_TW"
+    ],
+    "afterPack": "scripts/afterPack.js",
     "files": [
       "main.js",
       "preload.js",
@@ -41,6 +48,9 @@
         "dmg",
         "zip"
       ]
+    },
+    "dmg": {
+      "format": "ULFO"
     },
     "win": {
       "target": [
