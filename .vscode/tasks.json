@@ -1,0 +1,28 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Sync firmware from web/",
+      "type": "shell",
+      "command": "npm run sync",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      },
+      "detail": "Re-vendor the firmware subset out of web/ into renderer/"
+    },
+    {
+      "label": "Run firmware app",
+      "type": "shell",
+      "command": "npm start",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      },
+      "detail": "Sync (via prestart) then launch the Electron app"
+    }
+  ]
+}

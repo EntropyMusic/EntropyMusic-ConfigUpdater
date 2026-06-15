@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link
+      rel="icon"
+      href="assets/images/EntropyMusic/logoico_tpbg.svg"
+      type="image/svg+xml"
+    />
+    <title>Select Device - Entropy Music Firmware</title>
+
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/Settings.css" />
+    <style>
+      :root { --header-height: 0px; }
+      main { padding-top: 0; }
+
+      .Launcher-settings {
+        position: fixed;
+        top: var(--spacing-lg);
+        right: var(--spacing-lg);
+        z-index: 10;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        border: 1px solid var(--color-border-light);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--color-text-primary);
+        font-size: 18px;
+        line-height: 1;
+        cursor: pointer;
+        transition: background var(--transition-fast),
+          border-color var(--transition-fast);
+      }
+      .Launcher-settings:hover {
+        background: rgba(255, 255, 255, 0.09);
+        border-color: rgba(255, 255, 255, 0.5);
+      }
+
+      .Launcher {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: var(--spacing-2xl) var(--spacing-xl);
+        gap: var(--spacing-2xl);
+      }
+      .Launcher-brand {
+        display: inline-flex;
+        align-items: center;
+        line-height: 0;
+      }
+      .Launcher-brand img {
+        height: 56px;
+        width: auto;
+        transition: opacity var(--transition-fast);
+      }
+      .Launcher-brand:hover img {
+        opacity: 0.8;
+      }
+      .Launcher-title {
+        margin: 0;
+        font-size: var(--font-size-4xl);
+        font-weight: var(--font-weight-extrabold);
+        text-align: center;
+      }
+      .Launcher-subtitle {
+        margin: 0;
+        color: var(--color-text-muted);
+        font-size: var(--font-size-base);
+        text-align: center;
+      }
+      .Launcher-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+        gap: var(--spacing-lg);
+        width: 100%;
+        max-width: 1000px;
+      }
+      .DeviceCard {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--spacing-md);
+        padding: var(--spacing-lg);
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--color-border-light);
+        border-radius: var(--border-radius-lg);
+        color: var(--color-text-primary);
+        cursor: pointer;
+        text-decoration: none;
+        transition: transform var(--transition-fast),
+          border-color var(--transition-fast), background var(--transition-fast);
+      }
+      .DeviceCard:hover,
+      .DeviceCard:focus-visible {
+        transform: translateY(-3px);
+        border-color: rgba(255, 255, 255, 0.5);
+        background: rgba(255, 255, 255, 0.09);
+        outline: none;
+      }
+      .DeviceCard-thumb {
+        width: 100%;
+        height: 110px;
+        object-fit: contain;
+        pointer-events: none;
+      }
+      .DeviceCard-name {
+        font-size: var(--font-size-lg);
+        font-weight: var(--font-weight-semibold);
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <button
+      type="button"
+      class="Launcher-settings"
+      data-open-settings
+      aria-label="Open settings"
+      title="Settings"
+    >
+      ⚙
+    </button>
+    <main>
+      <div class="Launcher">
+        <a
+          class="Launcher-brand"
+          href="https://entropymusic.cc"
+          target="_blank"
+          rel="noopener"
+          title="Visit entropymusic.cc"
+        >
+          <img src="assets/images/EntropyMusic/logo_tpbg.svg" alt="Entropy Music" />
+        </a>
+        <div>
+          <h1 class="Launcher-title">Select Your Device</h1>
+          <p class="Launcher-subtitle">
+            Choose a model to open its firmware configurator.
+          </p>
+        </div>
+        <div class="Launcher-grid" id="deviceGrid"></div>
+      </div>
+    </main>
+
+    <script type="module">
+      import { PRODUCT_CONFIGS } from "./js/config/firmware-config.js";
+      import FirmwareSettingsPanel from "./js/pages/firmware/FirmwareSettingsPanel.js";
+
+      new FirmwareSettingsPanel().attach();
+
+      const grid = document.getElementById("deviceGrid");
+
+      const devices = Object.values(PRODUCT_CONFIGS).filter(
+        (cfg) => cfg.visibility !== "hidden"
+      );
+
+      for (const cfg of devices) {
+        const card = document.createElement("a");
+        card.className = "DeviceCard";
+        card.href = `index.html?product=${encodeURIComponent(cfg.id)}`;
+
+        if (cfg.thumbnail) {
+          const img = document.createElement("img");
+          img.className = "DeviceCard-thumb";
+          img.src = cfg.thumbnail;
+          img.alt = cfg.displayName || cfg.name || cfg.id;
+          img.loading = "lazy";
+          card.appendChild(img);
+        }
+
+        const name = document.createElement("div");
+        name.className = "DeviceCard-name";
+        name.textContent = cfg.displayName || cfg.name || cfg.id;
+        card.appendChild(name);
+
+        grid.appendChild(card);
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link
+      rel="icon"
+      href="assets/images/EntropyMusic/logoico_tpbg.svg"
+      type="image/svg+xml"
+    />
+    <title>Firmware - Entropy Music</title>
+
+    <!-- Font Awesome (UPLOAD checkmark). Loaded from CDN; requires internet.
+         Swap for a local copy if you need a fully offline app. -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      referrerpolicy="no-referrer"
+    />
+
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/Firmware.css" />
+    <link rel="stylesheet" href="css/Settings.css" />
+
+    <!-- Standalone app: no fixed site header, so drop the reserved header gap. -->
+    <style>
+      :root { --header-height: 0px; }
+      main { padding-top: 0; }
+      /* Firmware.css sizes the editor as calc(100vh - 80px - 44px), reserving
+         80px for the website's fixed header that this standalone app doesn't
+         have. Reclaim it so the editor fills down to the window bottom (44px =
+         the workspace bar above it). */
+      .MidiProgramEditor { height: calc(100vh - 44px); }
+      /* Workspace bar is justify-content:flex-end; push the back button to the
+         far left so it sits apart from the file/view actions. The button is an
+         <a>, so center its text and drop the underline to match the <button>s. */
+      .WorkspaceBack {
+        margin-right: auto;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        text-decoration: none;
+        line-height: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="FirmwareWorkspaceBar">
+        <a
+          href="launcher.html"
+          class="FirmwareFileButton WorkspaceBack"
+          title="Back to device selection"
+        >&larr; Devices</a>
+        <div class="FirmwareViewToggle" role="group" aria-label="Editor view">
+          <button type="button" data-firmware-view="single" class="is-active">Single</button>
+          <button type="button" data-firmware-view="table">Table</button>
+        </div>
+        <div class="FirmwareFileActions">
+          <button
+            type="button"
+            class="FirmwareFileButton"
+            data-firmware-save
+            title="Download the current configuration as JSON"
+          >Save</button>
+          <button
+            type="button"
+            class="FirmwareFileButton"
+            data-firmware-load
+            title="Load a configuration from a JSON file"
+          >Load</button>
+          <input type="file" id="loadStateInput" accept=".json,application/json" hidden>
+        </div>
+        <button
+          type="button"
+          class="FirmwareHelpButton"
+          data-open-settings
+          aria-label="Open settings"
+          title="Settings"
+        >
+          <i class="fa-solid fa-gear" aria-hidden="true"></i>
+        </button>
+        <button
+          type="button"
+          class="FirmwareHelpButton"
+          id="firmwareHelpButton"
+          aria-label="Open firmware help"
+          title="Firmware page help"
+        >
+          ?
+        </button>
+      </div>
+      <div class="MidiProgramEditor">
+        <div class="Middle">
+          <!--controller UI-->
+          <div class="ToolBar">
+            <div class="Product-select">
+              <select
+                id="midiDevices"
+                placeholder="Select Your Midi Device"
+                aria-label="Select Your Midi Device"
+              ></select>
+            </div>
+            <div class="SyncContainer">
+              <div class="SyncButtonGroup">
+                <button
+                  type="button"
+                  class="SyncButton"
+                  id="syncButton"
+                  aria-label="Sync device settings"
+                >
+                  <span>Sync</span>
+                  <span class="SyncIndicator" aria-hidden="true"></span>
+                </button>
+                <label class="SyncAuto" for="autoSyncToggle" title="Sync automatically when a device is selected">
+                  <input
+                    id="autoSyncToggle"
+                    type="checkbox"
+                    checked
+                    aria-label="Auto sync when device is selected"
+                  >
+                  <span>Auto</span>
+                </label>
+              </div>
+            </div>
+            <div
+              class="UploadStatus"
+              id="uploadStatus"
+              aria-live="polite"
+            ></div>
+            <button id="applyButton" class="apply-btn" aria-label="Apply">
+              <span>UPLOAD</span
+              ><i class="fa-solid fa-check" aria-hidden="true"></i>
+            </button>
+          </div>
+          <!-- Controller content is loaded dynamically here -->
+          <div class="ControllerWrapper" id="controller-container"></div>
+          <div class="FirmwareBatchEditor" id="firmwareBatchEditor" hidden></div>
+        </div>
+        <div class="Edit">
+          <div class="slider-title">
+            <h2>Slider 1</h2>
+            <div class="bank-select">
+              <label>Bank :</label>
+              <select class="bank-select">
+                <option value="1">Bank 1</option>
+                <option value="2">Bank 2</option>
+                <option value="3">Bank 3</option>
+              </select>
+            </div>
+          </div>
+          <div class="edit-item">
+            <!-- Edit item content is loaded dynamically here -->
+          </div>
+        </div>
+      </div>
+      <div class="FirmwareHelpModal" id="firmwareHelpModal" hidden>
+        <div
+          class="FirmwareHelpModal-backdrop"
+          data-dismiss-firmware-help
+        ></div>
+        <div
+          class="FirmwareHelpModal-dialog"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="firmwareHelpTitle"
+        >
+          <button
+            type="button"
+            class="FirmwareHelpModal-close"
+            id="firmwareHelpClose"
+            aria-label="Close firmware help"
+          >
+            ×
+          </button>
+          <h2 id="firmwareHelpTitle">How To Use This Page</h2>
+          <div class="FirmwareHelpModal-content">
+            <p>
+              1. Connect your Entropy Music device by USB and allow MIDI SysEx
+              access if prompted.
+            </p>
+            <p>
+              2. Choose your device from the MIDI dropdown. Auto sync is on by
+              default; turn it off if you want to use the Sync button manually.
+            </p>
+            <p>
+              3. Click a slider, knob, or button on the on-screen controller,
+              then edit its MIDI channel, CC, pitch bend mode, name, or LED
+              colors if supported.
+            </p>
+            <p>
+              4. Pick a different bank when your device supports multiple banks.
+            </p>
+            <p>
+              5. Click UPLOAD to send the current bank settings back to the
+              hardware.
+            </p>
+            <br>
+          </div>
+          <h2>Sync Light</h2>
+          <div class="FirmwareHelpModal-content">
+            <p>The Sync button reads the current device settings into the app.</p>
+            <p>The light turns green after sync succeeds. Upload still works when the light is off, but the app may not match the device's current settings.</p>
+            <p>Auto sync runs when a MIDI device is selected. If sync fails, click Sync again or reselect the device.</p>
+            <br>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script type="module" src="js/pages/Firmware.js"></script>
+  </body>
+</html>

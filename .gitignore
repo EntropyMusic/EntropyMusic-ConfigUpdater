@@ -1,0 +1,9 @@
+.DS_Store
+node_modules/
+dist/
+
+# Vendored from web/ by scripts/sync-firmware.mjs (regenerate with: npm run sync)
+renderer/js/
+renderer/css/
+renderer/components/
+renderer/assets/

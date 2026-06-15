@@ -1,0 +1,50 @@
+{
+  "name": "entropymusic-firmware",
+  "version": "0.1.0",
+  "description": "Standalone Electron app for the Entropy Music firmware configurator (firmware page only).",
+  "main": "main.js",
+  "author": "locky_Y",
+  "license": "ISC",
+  "scripts": {
+    "sync": "node scripts/sync-firmware.mjs",
+    "prestart": "npm run sync",
+    "start": "electron .",
+    "pack": "npm run sync && electron-builder --dir",
+    "dist": "npm run sync && electron-builder",
+    "dist:mac": "npm run sync && electron-builder --mac",
+    "dist:win": "npm run sync && electron-builder --win",
+    "dist:linux": "npm run sync && electron-builder --linux"
+  },
+  "build": {
+    "appId": "cc.entropymusic.firmware",
+    "productName": "Entropy Music Firmware",
+    "files": [
+      "main.js",
+      "renderer/**/*"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "mac": {
+      "category": "public.app-category.music",
+      "target": [
+        "dmg"
+      ]
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "category": "Audio"
+    }
+  },
+  "devDependencies": {
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8"
+  }
+}
