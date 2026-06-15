@@ -1,6 +1,10 @@
-.DS_Store
+# Dependencies
 node_modules/
+.npm/
+
+# Build output (electron-builder)
 dist/
+out/
 
 # Vendored from the web/ submodule by scripts/sync-firmware.mjs (regenerate with
 # `npm run sync`). NOT committed — CI rebuilds it from the submodule, which it
@@ -9,3 +13,38 @@ renderer/js/
 renderer/css/
 renderer/components/
 renderer/assets/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment / secrets
+.env
+.env.local
+.env.*.local
+
+# Editor / IDE
+.idea/
+*.swp
+*.swo
+.vscode/*
+!.vscode/tasks.json
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
