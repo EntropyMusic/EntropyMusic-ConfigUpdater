@@ -39,16 +39,22 @@ jobs:
         os: [macos-latest, windows-latest, ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
+      # The firmware UI lives in the PRIVATE website repo (the `web/` submodule),
+      # so CI checks it out with a read-only token (SUBMODULE_TOKEN: a fine-grained
+      # PAT with Contents:read on EntropyMusic-Website + this repo). `renderer/` is
+      # NOT committed here — it's regenerated from the submodule by `npm run sync`.
       - uses: actions/checkout@v4
         with:
-          submodules: recursive # web/ submodule is needed by npm run sync
+          submodules: recursive
+          token: ${{ secrets.SUBMODULE_TOKEN }}
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
       - run: npm ci
-      # `--publish never`: we upload via gh in the publish job, not via
-      # electron-builder (the generic provider can't upload anyway).
+      # `npm run dist` runs `npm run sync` (vendors the submodule into renderer/)
+      # then electron-builder. `--publish never`: we upload via gh in the publish
+      # job, not via electron-builder (the generic provider can't upload anyway).
       - run: npm run dist -- --publish never
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: false # don't attempt code signing in CI

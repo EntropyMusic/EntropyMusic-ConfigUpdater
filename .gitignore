@@ -2,7 +2,9 @@
 node_modules/
 dist/
 
-# Vendored from web/ by scripts/sync-firmware.mjs (regenerate with: npm run sync)
+# Vendored from the web/ submodule by scripts/sync-firmware.mjs (regenerate with
+# `npm run sync`). NOT committed — CI rebuilds it from the submodule, which it
+# checks out with a read-only token (secret SUBMODULE_TOKEN).
 renderer/js/
 renderer/css/
 renderer/components/

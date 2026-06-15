@@ -18,13 +18,15 @@ There are two ways to cut a release.
 `.github/workflows/release.yml` builds macOS + Windows + Linux on a tag push and
 uploads the installers + rewritten feeds to the release.
 
-One-time setup: make sure this repo is the code origin (the download URLs use
-`${{ github.repository }}`, and that's where releases are created):
+One-time setup:
 
-```bash
-git remote set-url origin https://github.com/EntropyMusic/EntropyMusic-ConfigUpdater.git
-git push -u origin HEAD   # pushes code + .github/ so the workflow exists
-```
+1. This repo is the code origin (the download URLs use `${{ github.repository }}`,
+   and that's where releases are created).
+2. Add a repo secret **`SUBMODULE_TOKEN`** — a fine-grained PAT with
+   **Contents: read** on both `EntropyMusic-Website` and this repo. CI uses it to
+   clone the private `web/` submodule (the firmware UI) at build time. `renderer/`
+   is **not** committed here; CI regenerates it via `npm run sync`. (Fine-grained
+   PATs expire — set a reminder to rotate, or use a deploy key for no expiry.)
 
 Cut a release:
 
@@ -33,7 +35,9 @@ npm version patch      # or minor / major — bumps package.json + git tag
 git push --follow-tags # triggers the workflow
 ```
 
-That's it — the redirect serves the new feeds automatically.
+CI checks out the submodule with `SUBMODULE_TOKEN`, runs `npm run sync` to vendor
+the firmware UI into `renderer/`, builds all three OSes, and uploads the
+installers + feeds. The redirect serves the new feeds automatically.
 
 ## Option B — local, single platform
 
