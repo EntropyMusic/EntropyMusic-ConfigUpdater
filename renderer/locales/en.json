@@ -1,0 +1,191 @@
+{
+  "common": {
+    "nav": {
+      "home": "Home",
+      "about": "About",
+      "product": "Product",
+      "workshop": "Workshop",
+      "application": "Application",
+      "gallery": "Gallery",
+      "contact": "Contact"
+    },
+    "language": {
+      "en": "En",
+      "zh": "中"
+    },
+    "logoAlt": "Entropy Music Logo",
+    "selectLanguage": "Select Language",
+    "close": "Close",
+    "loading": "Loading...",
+    "error": "Error",
+    "footer": {
+      "privacy": "Privacy Policy",
+      "disclaimer": "Disclaimer",
+      "instagram": "Instagram",
+      "xiaohongshu": "Xiaohongshu"
+    }
+  },
+  "pages": {
+    "launcher": {
+      "title": "Select Device - Entropy Music Firmware",
+      "heading": "Select Your Device",
+      "subtitle": "Choose a model to open its firmware configurator.",
+      "visitSite": "Visit entropymusic.cc",
+      "settings": "Settings",
+      "update": {
+        "install": "Restart & Install",
+        "available": "Downloading update {{version}}…",
+        "downloading": "Downloading update… {{percent}}%",
+        "ready": "Update {{version}}ready."
+      }
+    },
+    "index": {
+      "title": "Entropy Music",
+      "subtitle": "We Play We Create",
+      "metaDescription": "Entropy Music - We Play We Create"
+    },
+    "about": {
+      "title": "About - Entropy Music",
+      "musician": "Musician",
+      "audioEngineer": "Audio Full-Stack Engineer",
+      "artist": "Installation Artist",
+      "bio1": "Beginning with classical piano training in childhood, he pursued systematic studies in music aesthetics at Xinghai Conservatory of Music and later conducted in-depth research on hip-hop culture and sampling art at Goldsmiths, University of London.",
+      "bio2": "Over the past decade, his work has spanned several domains, including music education, music hardware development, electro-acoustic instrument design, and interdisciplinary workshop curation.",
+      "bio3": "His creative practice is grounded in classical foundations and centers on developing contemporary, exploratory, and thoughtfully designed artistic experiences."
+    },
+    "firmware": {
+      "title": "Firmware - Entropy Music",
+      "midiDeviceLabel": "Midi Device:",
+      "dawLabel": "DAW",
+      "syncLabel": "Sync",
+      "uploadButton": "UPLOAD",
+      "bankLabel": "Bank :",
+      "selectProduct": "Select Your Product",
+      "downloadFirmware": "Download Firmware",
+
+      "viewTutorial": "View Tutorial",
+      "continue": "Continue",
+      "em4mini": "EM-4 Mini",
+      "em4": "EM-4",
+      "emE4": "EM-E4",
+      "emK9": "EM-K9",
+      "tutorialTitle": "Firmware Update Tutorial",
+      "tutorialStep1": "1. Download the firmware file for your product",
+      "tutorialStep2": "2. Connect your device to computer via USB",
+      "tutorialStep3": "3. Enter bootloader mode (hold button while connecting)",
+      "tutorialStep4": "4. Run the firmware updater tool",
+      "tutorialStep5": "5. Select the downloaded file and click update",
+      "tutorialNote": "Note: Do not disconnect the device during update process.",
+      "workspace": {
+        "back": "Devices",
+        "single": "Single",
+        "table": "Table",
+        "save": "Save",
+        "load": "Load",
+        "saveTitle": "Download the current configuration as JSON",
+        "loadTitle": "Load a configuration from a JSON file",
+        "settings": "Settings",
+        "help": "Firmware page help"
+      },
+      "toolbar": {
+        "selectDevice": "Select Your Midi Device",
+        "sync": "Sync",
+        "syncTitle": "Sync device settings",
+        "auto": "Auto",
+        "autoTitle": "Sync automatically when a device is selected",
+        "upload": "UPLOAD"
+      },
+      "edit": {
+        "bank": "Bank :",
+        "bank1": "Bank 1",
+        "bank2": "Bank 2",
+        "bank3": "Bank 3",
+        "midiChannel": "Midi Channel",
+        "ccChannel": "CC Channel",
+        "bit14": "14 bit",
+        "pitchBendMode": "Pitch Bend Mode",
+        "reset": "Reset",
+        "deviceSettings": "Device Settings",
+        "controlColor": "Control Color",
+        "brightness": "Brightness",
+        "clickMidiChannel": "Click MIDI Channel",
+        "clickCcChannel": "Click CC Channel",
+        "holdToggle": "Hold/Toggle (✅ = Toggle)",
+        "controlName": "Control Interface Name",
+        "enterNumber": "Enter a number...",
+        "enterName": "Enter name...",
+        "disabled": "Disabled"
+      },
+      "batch": {
+        "name": "Name",
+        "midiCh": "MIDI Ch",
+        "cc": "CC",
+        "bit14": "14-bit",
+        "bit14Title": "Pitch bend / 14-bit mode",
+        "clickCh": "Click Ch",
+        "clickCc": "Click CC",
+        "toggle": "Toggle",
+        "toggleTitle": "Checked = toggle, unchecked = hold",
+        "bank": "Bank",
+        "selectedOne": "1 selected",
+        "selected": "{{count}} selected",
+        "setCh": "Set Ch",
+        "ccFrom": "CC from",
+        "step": "step",
+        "fill": "Fill",
+        "reset": "Reset",
+        "copyBankTo": "Copy bank to",
+        "copy": "Copy",
+        "pitchBend": "Pitch bend",
+        "copied": "Copied Bank {{from}} to Bank {{to}}"
+      },
+      "help": {
+        "title": "How To Use This Page",
+        "p1": "1. Connect your Entropy Music device by USB and allow MIDI SysEx access if prompted.",
+        "p2": "2. Choose your device from the MIDI dropdown. Auto sync is on by default; turn it off if you want to use the Sync button manually.",
+        "p3": "3. Click a slider, knob, or button on the on-screen controller, then edit its MIDI channel, CC, pitch bend mode, name, or LED colors if supported.",
+        "p4": "4. Pick a different bank when your device supports multiple banks.",
+        "p5": "5. Click UPLOAD to send the current bank settings back to the hardware.",
+        "syncTitle": "Sync Light",
+        "sp1": "The Sync button reads the current device settings into the app.",
+        "sp2": "The light turns green after sync succeeds. Upload still works when the light is off, but the app may not match the device's current settings.",
+        "sp3": "Auto sync runs when a MIDI device is selected. If sync fails, click Sync again or reselect the device."
+      },
+      "settings": {
+        "title": "Settings",
+        "appearance": "Appearance",
+        "accent": "Accent color",
+        "accentHint": "Highlight color used across the app.",
+        "reduceMotion": "Reduce motion",
+        "reduceMotionHint": "Minimize animations and transitions.",
+        "language": "Language",
+        "languageHint": "Display language for the app interface.",
+        "behavior": "Behavior",
+        "autoSync": "Auto-sync on device select",
+        "autoSyncHint": "Read settings from the device as soon as it is chosen.",
+        "confirmUpload": "Confirm before upload",
+        "confirmUploadHint": "Ask before sending settings to the hardware.",
+        "defaultView": "Default editor view",
+        "defaultViewHint": "View shown when the editor opens.",
+        "single": "Single",
+        "table": "Table",
+        "reset": "Reset to defaults",
+        "confirmUploadPrompt": "Upload the current bank settings to the device?"
+      }
+    },
+    "product": {
+      "title": "Product - Entropy Music",
+      "description": "Product description goes here. This is where you can add detailed information about the product, features, specifications, and any other relevant details.",
+      "price": "$299.99",
+      "availability": "In Stock",
+      "viewDetails": "View Details"
+    },
+    "contact": {
+      "title": "Contact - Entropy Music",
+      "followUs": "Follow Us",
+      "email": "Email",
+      "instagram": "Instagram",
+      "xiaohongshu": "Xiaohongshu"
+    }
+  }
+}

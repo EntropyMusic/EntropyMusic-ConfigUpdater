@@ -8,7 +8,7 @@
       href="assets/images/EntropyMusic/logoico_tpbg.svg"
       type="image/svg+xml"
     />
-    <title>Firmware - Entropy Music</title>
+    <title data-i18n="pages.firmware.title">Firmware - Entropy Music</title>
 
     <!-- Font Awesome (UPLOAD checkmark). Loaded from CDN; requires internet.
          Swap for a local copy if you need a fully offline app. -->
@@ -20,7 +20,8 @@
 
     <link rel="stylesheet" href="css/main.css" />
     <link rel="stylesheet" href="css/Firmware.css" />
-    <link rel="stylesheet" href="css/Settings.css" />
+    <!-- App-owned settings panel styles (renderer/app/, not vendored by sync). -->
+    <link rel="stylesheet" href="app/Settings.css" />
 
     <!-- Standalone app: no fixed site header, so drop the reserved header gap. -->
     <style>
@@ -52,22 +53,26 @@
           href="launcher.html"
           class="FirmwareFileButton WorkspaceBack"
           title="Back to device selection"
-        >&larr; Devices</a>
+        >&larr; <span data-i18n="pages.firmware.workspace.back">Devices</span></a>
         <div class="FirmwareViewToggle" role="group" aria-label="Editor view">
-          <button type="button" data-firmware-view="single" class="is-active">Single</button>
-          <button type="button" data-firmware-view="table">Table</button>
+          <button type="button" data-firmware-view="single" class="is-active" data-i18n="pages.firmware.workspace.single">Single</button>
+          <button type="button" data-firmware-view="table" data-i18n="pages.firmware.workspace.table">Table</button>
         </div>
         <div class="FirmwareFileActions">
           <button
             type="button"
             class="FirmwareFileButton"
             data-firmware-save
+            data-i18n="pages.firmware.workspace.save"
+            data-i18n-title="pages.firmware.workspace.saveTitle"
             title="Download the current configuration as JSON"
           >Save</button>
           <button
             type="button"
             class="FirmwareFileButton"
             data-firmware-load
+            data-i18n="pages.firmware.workspace.load"
+            data-i18n-title="pages.firmware.workspace.loadTitle"
             title="Load a configuration from a JSON file"
           >Load</button>
           <input type="file" id="loadStateInput" accept=".json,application/json" hidden>
@@ -77,6 +82,7 @@
           class="FirmwareHelpButton"
           data-open-settings
           aria-label="Open settings"
+          data-i18n-title="pages.firmware.workspace.settings"
           title="Settings"
         >
           <i class="fa-solid fa-gear" aria-hidden="true"></i>
@@ -86,6 +92,7 @@
           class="FirmwareHelpButton"
           id="firmwareHelpButton"
           aria-label="Open firmware help"
+          data-i18n-title="pages.firmware.workspace.help"
           title="Firmware page help"
         >
           ?
@@ -109,18 +116,19 @@
                   class="SyncButton"
                   id="syncButton"
                   aria-label="Sync device settings"
+                  data-i18n-title="pages.firmware.toolbar.syncTitle"
                 >
-                  <span>Sync</span>
+                  <span data-i18n="pages.firmware.toolbar.sync">Sync</span>
                   <span class="SyncIndicator" aria-hidden="true"></span>
                 </button>
-                <label class="SyncAuto" for="autoSyncToggle" title="Sync automatically when a device is selected">
+                <label class="SyncAuto" for="autoSyncToggle" data-i18n-title="pages.firmware.toolbar.autoTitle" title="Sync automatically when a device is selected">
                   <input
                     id="autoSyncToggle"
                     type="checkbox"
                     checked
                     aria-label="Auto sync when device is selected"
                   >
-                  <span>Auto</span>
+                  <span data-i18n="pages.firmware.toolbar.auto">Auto</span>
                 </label>
               </div>
             </div>
@@ -130,7 +138,7 @@
               aria-live="polite"
             ></div>
             <button id="applyButton" class="apply-btn" aria-label="Apply">
-              <span>UPLOAD</span
+              <span data-i18n="pages.firmware.toolbar.upload">UPLOAD</span
               ><i class="fa-solid fa-check" aria-hidden="true"></i>
             </button>
           </div>
@@ -142,11 +150,11 @@
           <div class="slider-title">
             <h2>Slider 1</h2>
             <div class="bank-select">
-              <label>Bank :</label>
+              <label data-i18n="pages.firmware.edit.bank">Bank :</label>
               <select class="bank-select">
-                <option value="1">Bank 1</option>
-                <option value="2">Bank 2</option>
-                <option value="3">Bank 3</option>
+                <option value="1" data-i18n="pages.firmware.edit.bank1">Bank 1</option>
+                <option value="2" data-i18n="pages.firmware.edit.bank2">Bank 2</option>
+                <option value="3" data-i18n="pages.firmware.edit.bank3">Bank 3</option>
               </select>
             </div>
           </div>
@@ -174,35 +182,35 @@
           >
             ×
           </button>
-          <h2 id="firmwareHelpTitle">How To Use This Page</h2>
+          <h2 id="firmwareHelpTitle" data-i18n="pages.firmware.help.title">How To Use This Page</h2>
           <div class="FirmwareHelpModal-content">
-            <p>
+            <p data-i18n="pages.firmware.help.p1">
               1. Connect your Entropy Music device by USB and allow MIDI SysEx
               access if prompted.
             </p>
-            <p>
+            <p data-i18n="pages.firmware.help.p2">
               2. Choose your device from the MIDI dropdown. Auto sync is on by
               default; turn it off if you want to use the Sync button manually.
             </p>
-            <p>
+            <p data-i18n="pages.firmware.help.p3">
               3. Click a slider, knob, or button on the on-screen controller,
               then edit its MIDI channel, CC, pitch bend mode, name, or LED
               colors if supported.
             </p>
-            <p>
+            <p data-i18n="pages.firmware.help.p4">
               4. Pick a different bank when your device supports multiple banks.
             </p>
-            <p>
+            <p data-i18n="pages.firmware.help.p5">
               5. Click UPLOAD to send the current bank settings back to the
               hardware.
             </p>
             <br>
           </div>
-          <h2>Sync Light</h2>
+          <h2 data-i18n="pages.firmware.help.syncTitle">Sync Light</h2>
           <div class="FirmwareHelpModal-content">
-            <p>The Sync button reads the current device settings into the app.</p>
-            <p>The light turns green after sync succeeds. Upload still works when the light is off, but the app may not match the device's current settings.</p>
-            <p>Auto sync runs when a MIDI device is selected. If sync fails, click Sync again or reselect the device.</p>
+            <p data-i18n="pages.firmware.help.sp1">The Sync button reads the current device settings into the app.</p>
+            <p data-i18n="pages.firmware.help.sp2">The light turns green after sync succeeds. Upload still works when the light is off, but the app may not match the device's current settings.</p>
+            <p data-i18n="pages.firmware.help.sp3">Auto sync runs when a MIDI device is selected. If sync fails, click Sync again or reselect the device.</p>
             <br>
           </div>
         </div>
@@ -210,5 +218,8 @@
     </main>
 
     <script type="module" src="js/pages/Firmware.js"></script>
+    <!-- App-owned settings panel (incl. language switcher). Self-attaches; not
+         vendored from the website, so it survives every sync-firmware run. -->
+    <script type="module" src="app/FirmwareSettingsPanel.js"></script>
   </body>
 </html>

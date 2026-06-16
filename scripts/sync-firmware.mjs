@@ -21,9 +21,14 @@ const COPIES = [
   // entry + firmware modules
   ["js/pages/Firmware.js", "js/pages/Firmware.js"],
   ["js/pages/firmware", "js/pages/firmware"],
+  // i18n engine + translation strings. Firmware.js side-effect-imports the
+  // engine; i18n-core fetches /locales/<lang>.json, served from renderer/ root
+  // by the app:// protocol. The settings panel (incl. the language switcher)
+  // is NOT vendored here — it is app-authored in renderer/app/.
+  ["js/i18n", "js/i18n"],
+  ["locales", "locales"],
   // config + midi
   ["js/config/firmware-config.js", "js/config/firmware-config.js"],
-  ["js/config/Settings.js", "js/config/Settings.js"],
   ["js/midi/MidiManager.js", "js/midi/MidiManager.js"],
   // controller templates fetched at runtime (.html + .css per device)
   ["components/controllers/firmware", "components/controllers/firmware"],
@@ -31,7 +36,6 @@ const COPIES = [
   ["css/main.css", "css/main.css"],
   ["css/fonts.css", "css/fonts.css"],
   ["css/Firmware.css", "css/Firmware.css"],
-  ["css/Settings.css", "css/Settings.css"],
   // fonts + device thumbnails
   ["public/assets/fonts", "assets/fonts"],
   ["public/assets/images/Firmware", "assets/images/Firmware"],

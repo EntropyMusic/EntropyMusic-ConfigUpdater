@@ -1,0 +1,215 @@
+/* Shared settings panel: used by both the firmware editor (index.html) and the
+   device launcher (launcher.html). Self-contained — it does NOT depend on
+   Firmware.css, since the launcher doesn't load it. Firmware tokens are used
+   when present (editor page) and fall back to literals otherwise (launcher). */
+
+.SettingsModal[hidden] {
+  display: none;
+}
+
+.SettingsModal {
+  position: fixed;
+  inset: 0;
+  z-index: 1250;
+}
+
+.SettingsModal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.76);
+  backdrop-filter: blur(4px);
+}
+
+.SettingsModal-dialog {
+  position: relative;
+  width: min(calc(100vw - 32px), 560px);
+  max-height: calc(100vh - 64px);
+  margin: 32px auto;
+  padding: 28px 28px 24px;
+  overflow-y: auto;
+  border: 1px solid var(--firmware-border-strong, rgba(255, 255, 255, 0.16));
+  border-radius: 22px;
+  background: var(--firmware-panel, #17181b);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+  color: var(--firmware-text, #e9ebee);
+}
+
+.SettingsModal-title {
+  margin: 0;
+  font-size: 28px;
+  letter-spacing: 0.04em;
+}
+
+.SettingsModal-close {
+  position: sticky;
+  top: 0;
+  float: right;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--firmware-border-strong, rgba(255, 255, 255, 0.16));
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--firmware-text, #e9ebee);
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.SettingsModal-close:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.Settings {
+  display: grid;
+  gap: 26px;
+  margin-top: 6px;
+}
+
+.Settings-group {
+  display: grid;
+  gap: 4px;
+}
+
+.Settings-group h3 {
+  margin: 0 0 6px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--firmware-muted, #8e949c);
+}
+
+.Settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 12px 0;
+  border-top: 1px solid var(--firmware-border, rgba(255, 255, 255, 0.08));
+  margin: 0;
+}
+
+.Settings-group h3 + .Settings-row {
+  border-top: none;
+}
+
+label.Settings-row {
+  cursor: pointer;
+}
+
+.Settings-label {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.Settings-name {
+  font-size: 15px;
+  color: var(--firmware-text, #e9ebee);
+}
+
+.Settings-hint {
+  font-size: 13px;
+  color: var(--firmware-muted, #8e949c);
+  line-height: 1.4;
+}
+
+.Settings-row input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  margin: 0;
+  accent-color: var(--firmware-accent, #ffffff);
+  cursor: pointer;
+}
+
+.Settings-row select {
+  flex: 0 0 auto;
+  padding: 7px 10px;
+  border: 1px solid var(--firmware-border-strong, rgba(255, 255, 255, 0.16));
+  border-radius: var(--firmware-radius, 6px);
+  background: var(--firmware-inset, #0b0c0e);
+  color: var(--firmware-text, #e9ebee);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.Settings-swatches {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 8px;
+}
+
+.Settings-swatch {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: var(--swatch);
+  box-shadow: 0 0 0 1px var(--firmware-border-strong, rgba(255, 255, 255, 0.16));
+  cursor: pointer;
+  transition: transform var(--transition-fast, 0.2s ease);
+}
+
+.Settings-swatch:hover {
+  transform: scale(1.1);
+}
+
+.Settings-swatch.is-active {
+  border-color: var(--firmware-text, #e9ebee);
+  box-shadow: 0 0 0 1px var(--firmware-text, #e9ebee);
+}
+
+.Settings-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 4px;
+}
+
+.Settings-button {
+  padding: 8px 14px;
+  border: 1px solid var(--firmware-border-strong, rgba(255, 255, 255, 0.16));
+  border-radius: var(--firmware-radius, 6px);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--firmware-text, #e9ebee);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.Settings-button:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* Round trigger button (gear). Shared by both pages' headers. */
+.SettingsButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  flex: 0 0 20px;
+  padding: 0;
+  border: 1px solid var(--firmware-border-strong, rgba(255, 255, 255, 0.16));
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--firmware-text, #e9ebee);
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.SettingsButton:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* "Reduce motion" appearance setting. */
+body.reduce-motion *,
+body.reduce-motion *::before,
+body.reduce-motion *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}

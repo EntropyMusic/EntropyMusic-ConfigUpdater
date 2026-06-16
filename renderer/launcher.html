@@ -8,10 +8,11 @@
       href="assets/images/EntropyMusic/logoico_tpbg.svg"
       type="image/svg+xml"
     />
-    <title>Select Device - Entropy Music Firmware</title>
+    <title data-i18n="pages.launcher.title">Select Device - Entropy Music Firmware</title>
 
     <link rel="stylesheet" href="css/main.css" />
-    <link rel="stylesheet" href="css/Settings.css" />
+    <!-- App-owned settings panel styles (renderer/app/, not vendored by sync). -->
+    <link rel="stylesheet" href="app/Settings.css" />
     <style>
       :root { --header-height: 0px; }
       main { padding-top: 0; }
@@ -170,6 +171,7 @@
       data-open-settings
       aria-label="Open settings"
       title="Settings"
+      data-i18n-title="pages.launcher.settings"
     >
       ⚙
     </button>
@@ -181,12 +183,13 @@
           target="_blank"
           rel="noopener"
           title="Visit entropymusic.cc"
+          data-i18n-title="pages.launcher.visitSite"
         >
           <img src="assets/images/EntropyMusic/logo_tpbg.svg" alt="Entropy Music" />
         </a>
         <div>
-          <h1 class="Launcher-title">Select Your Device</h1>
-          <p class="Launcher-subtitle">
+          <h1 class="Launcher-title" data-i18n="pages.launcher.heading">Select Your Device</h1>
+          <p class="Launcher-subtitle" data-i18n="pages.launcher.subtitle">
             Choose a model to open its firmware configurator.
           </p>
         </div>
@@ -196,7 +199,7 @@
 
     <div class="UpdateBanner" id="updateBanner" role="status" aria-live="polite">
       <span class="UpdateBanner-text" id="updateText"></span>
-      <button type="button" class="UpdateBanner-action" id="updateInstall" hidden>
+      <button type="button" class="UpdateBanner-action" id="updateInstall" data-i18n="pages.launcher.update.install" hidden>
         Restart &amp; Install
       </button>
     </div>
@@ -219,20 +222,45 @@
         };
         const hide = () => banner.classList.remove("is-visible");
 
+        // Translate via the shared i18n engine when it is ready; fall back to
+        // the English template (with the same {{param}} substitution) if a
+        // status arrives before i18n has initialized.
+        const tr = (key, fallback, params = {}) => {
+          const ready = window.i18n && window.i18n.initialized;
+          let str = ready ? window.i18n.t(key, params) : fallback;
+          if (!ready) {
+            for (const [k, v] of Object.entries(params)) {
+              str = str.replace(new RegExp(`{{${k}}}`, "g"), v);
+            }
+          }
+          return str;
+        };
+
         installBtn.addEventListener("click", () => updater.install());
 
         updater.onStatus((status) => {
           switch (status.state) {
             case "available":
-              show(`Downloading update ${status.version ? "v" + status.version : ""}…`);
+              show(
+                tr("pages.launcher.update.available", "Downloading update {{version}}…", {
+                  version: status.version ? "v" + status.version : "",
+                })
+              );
               break;
             case "downloading":
-              show(`Downloading update… ${status.percent ?? 0}%`);
+              show(
+                tr("pages.launcher.update.downloading", "Downloading update… {{percent}}%", {
+                  percent: status.percent ?? 0,
+                })
+              );
               break;
             case "downloaded":
-              show(`Update ${status.version ? "v" + status.version + " " : ""}ready.`, {
-                action: true,
-              });
+              show(
+                tr("pages.launcher.update.ready", "Update {{version}}ready.", {
+                  version: status.version ? "v" + status.version + " " : "",
+                }),
+                { action: true }
+              );
               break;
             // "checking", "up-to-date", and "error" stay silent on the launcher.
             default:
@@ -244,9 +272,12 @@
 
     <script type="module">
       import { PRODUCT_CONFIGS } from "./js/config/firmware-config.js";
-      import FirmwareSettingsPanel from "./js/pages/firmware/FirmwareSettingsPanel.js";
-
-      new FirmwareSettingsPanel().attach();
+      // i18n engine (vendored from the website) so the panel's language switch
+      // works here too and the choice persists into the editor page.
+      import "./js/i18n/i18n-core.js";
+      import "./js/i18n/i18n-dom.js";
+      // App-owned settings panel; self-attaches on load.
+      import "./app/FirmwareSettingsPanel.js";
 
       const grid = document.getElementById("deviceGrid");
 
