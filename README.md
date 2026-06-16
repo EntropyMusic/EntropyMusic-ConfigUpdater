@@ -28,8 +28,6 @@ The app checks for updates automatically and installs them for you.
 When you launch the app you’ll see all supported Entropy Music models. Click the one
 you’re configuring.
 
-![Select your device](docs/screenshots/select-device.png)
-
 ### 2. Connect and configure
 
 1. Plug your device into your computer with a USB cable.
@@ -45,8 +43,6 @@ control at once) using the toggle at the top.
 so you start from whatever is already on the device. Leave **Auto** on to do this
 automatically whenever you select a device. (Sending your edits the other way — from
 the app to the hardware — is what **UPLOAD** does.)
-
-![Configure your controls](docs/screenshots/configurator.png)
 
 ### 3. Upload to your hardware
 

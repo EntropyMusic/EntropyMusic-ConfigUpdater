@@ -36,7 +36,7 @@
         "install": "Restart & Install",
         "available": "Downloading update {{version}}…",
         "downloading": "Downloading update… {{percent}}%",
-        "ready": "Update {{version}}ready."
+        "ready": "Update {{version}} ready."
       }
     },
     "index": {
