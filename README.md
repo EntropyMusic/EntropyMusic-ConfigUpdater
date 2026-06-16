@@ -39,8 +39,12 @@ you’re configuring.
    higher-resolution control. Use the **Bank** dropdown to set up multiple layouts.
 
 Switch between **Single** (edit one control at a time) and **Table** (see every
-control at once) using the toggle at the top. Leave **Sync / Auto** on to keep the
-app and hardware in step as you make changes.
+control at once) using the toggle at the top.
+
+**Sync** reads your device's current configuration *from the hardware into the app*,
+so you start from whatever is already on the device. Leave **Auto** on to do this
+automatically whenever you select a device. (Sending your edits the other way — from
+the app to the hardware — is what **UPLOAD** does.)
 
 ![Configure your controls](docs/screenshots/configurator.png)
 
