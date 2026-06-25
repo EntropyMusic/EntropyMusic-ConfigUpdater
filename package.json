@@ -45,12 +45,17 @@
     "mac": {
       "category": "public.app-category.music",
       "target": [
-        "dmg",
-        "zip"
+        { "target": "dmg", "arch": ["x64", "arm64"] },
+        { "target": "zip", "arch": ["x64", "arm64"] }
       ]
     },
     "dmg": {
-      "format": "ULFO"
+      "format": "ULFO",
+      "contents": [
+        { "x": 130, "y": 220, "type": "file", "path": "scripts/fix-gatekeeper.command" },
+        { "x": 250, "y": 220, "type": "file" },
+        { "x": 410, "y": 220, "type": "link", "path": "/Applications" }
+      ]
     },
     "win": {
       "target": [

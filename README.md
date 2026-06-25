@@ -18,8 +18,18 @@ Grab the latest version for your operating system from the
 
 The app checks for updates automatically and installs them for you.
 
-> **macOS:** if you see “app can’t be opened because it is from an unidentified
-> developer,” right-click the app and choose **Open**, then confirm once.
+> **macOS:** the app isn’t signed with an Apple Developer ID, so macOS blocks it
+> after download (“app is damaged” or “can’t verify developer”). To fix it:
+>
+> 1. Drag **Entropy Music Firmware** into your **Applications** folder.
+> 2. In the same DMG window, **right-click `fix-gatekeeper.command` → Open**, then
+>    click **Open** in the dialog. It clears the download flag and launches the app.
+>
+> Prefer the command line? Run this once instead:
+>
+> ```sh
+> xattr -dr com.apple.quarantine "/Applications/Entropy Music Firmware.app"
+> ```
 
 ## How to use it
 
