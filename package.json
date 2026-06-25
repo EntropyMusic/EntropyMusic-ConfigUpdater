@@ -1,6 +1,6 @@
 {
   "name": "entropymusic-firmware",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Standalone Electron app for the Entropy Music firmware configurator (firmware page only).",
   "main": "main.js",
   "author": "Entropy Music LLC",
@@ -45,16 +45,42 @@
     "mac": {
       "category": "public.app-category.music",
       "target": [
-        { "target": "dmg", "arch": ["x64", "arm64"] },
-        { "target": "zip", "arch": ["x64", "arm64"] }
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
       ]
     },
     "dmg": {
       "format": "ULFO",
       "contents": [
-        { "x": 130, "y": 220, "type": "file", "path": "scripts/fix-gatekeeper.command" },
-        { "x": 250, "y": 220, "type": "file" },
-        { "x": 410, "y": 220, "type": "link", "path": "/Applications" }
+        {
+          "x": 130,
+          "y": 220,
+          "type": "file",
+          "path": "scripts/fix-gatekeeper.command"
+        },
+        {
+          "x": 250,
+          "y": 220,
+          "type": "file"
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
       ]
     },
     "win": {
