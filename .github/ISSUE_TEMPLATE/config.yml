@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: macOS install / "app is damaged" help
+    url: https://github.com/EntropyMusic/EntropyMusic-ConfigUpdater/blob/main/docs/macos-install.md
+    about: macOS blocks the unsigned app after download — read this before filing a bug.
